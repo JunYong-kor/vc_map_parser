@@ -2,33 +2,32 @@
 
 test 107669 line read time 0.113 sec
 
-
 How to use?
 
 	CMapInfo info;
-  MAPParse(&info, filepath)
+	MAPParse(&info, filepath)
 
 example
-----------------------------
-#include "MAPParser.h"
-using namespace MAPParser;
 
-int main()
-{
-	CMapInfo info;
-	if(MAPParse(&info, "E:/sourcefolder/trunk/application.map") == Parse_Success) // Parse_Success is 0
-  {
-    //read ok
-    return 1;
-  }
-  //fail
-  return 0;
-}
-----------------------------
+	#include "MAPParser.h"
+	using namespace MAPParser;
+
+	int main()
+	{
+		CMapInfo info;
+		if(MAPParse(&info, "E:/sourcefolder/trunk/application.map") == Parse_Success) // Parse_Success is 0
+	  {
+	    //read ok
+	    return 1;
+	  }
+	  //fail
+	  return 0;
+	}
+
 
 CMapInfo structure
 
-  class CMapInfo
+ 	class CMapInfo
 	{
 	public:
 		CMapInfo();
@@ -46,7 +45,7 @@ CMapInfo structure
 	};
 
 
-  struct CBasePos
+  	struct CBasePos
 	{
 		SectionType section;
 		OffsetType offset;

@@ -1,6 +1,10 @@
 #pragma once
 #include <vector>
 
+#include <windows.h>
+#include <imagehlp.h>
+#pragma comment (lib, "DbgHelp.lib")
+
 #pragma pack( push, 1 )
 namespace MAPParser
 {
@@ -110,6 +114,6 @@ namespace MAPParser
 		OffsetType entryoffset;
 	};
 
-	ParseResult MAPParse(CMapInfo *result, const char *path);
+	ParseResult MAPParse(CMapInfo *result, const char *path, unsigned flag = 0);
 }
 #pragma pack( pop )

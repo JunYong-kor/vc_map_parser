@@ -1,10 +1,11 @@
 #include "MAPParser.h"
-#include <windows.h>
-#include <imagehlp.h>
-
-#pragma comment (lib, "DbgHelp.lib")
+// #include <windows.h>
+// #include <imagehlp.h>
+// 
+// #pragma comment (lib, "DbgHelp.lib")
 
 #define RESERVESIZE 65536
+#define NAMEBUFSIZE 100000
 
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
@@ -74,7 +75,8 @@ MAPParser::CMapInfo::~CMapInfo()
 	delete mempool;
 }
 
-MAPParser::ParseResult MAPParser::MAPParse(CMapInfo *result, const char *path)
+MAPParser::ParseResult MAPParser::MAPParse(CMapInfo *result, const char *path
+	, unsigned flag)
 {
 	MAPParser::ParseResult returnvalue = MAPParser::Parse_Success;
 	if(result == nullptr || path == nullptr)
@@ -108,6 +110,8 @@ MAPParser::ParseResult MAPParser::MAPParse(CMapInfo *result, const char *path)
 
 			{
 				char *readpos = (char*)mapViewOfFile;
+				char namebuf[NAMEBUFSIZE];
+				char unnamebuf[NAMEBUFSIZE];
 
 				//Read ModuleName
 				readpos = nextpos(readpos);
@@ -194,8 +198,22 @@ MAPParser::ParseResult MAPParser::MAPParse(CMapInfo *result, const char *path)
 						readpos = nextpos(readpos);
 						strend = strchr(readpos, ' ');
 						bufsize = strend - readpos;
-						data->name = result->mempool->alloc(bufsize + 1);
-						memcpy(data->name, readpos, bufsize);
+
+						if(flag)
+						{
+							memcpy(namebuf, readpos, bufsize);
+							namebuf[bufsize] = 0;
+
+							UnDecorateSymbolName(namebuf, unnamebuf, NAMEBUFSIZE, flag);
+							bufsize = strlen(unnamebuf);
+							data->name = result->mempool->alloc(bufsize + 1);
+							memcpy(data->name, unnamebuf, bufsize);
+						}
+						else
+						{
+							data->name = result->mempool->alloc(bufsize + 1);
+							memcpy(data->name, readpos, bufsize);
+						}
 						data->name[bufsize] = 0;
 						readpos = nextpos(strend);
 						readpos = hextodeclow(readpos, &data->rvabase);

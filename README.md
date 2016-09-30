@@ -5,7 +5,9 @@ test 107669 line read time 0.113 sec
 How to use?
 
 	CMapInfo info;
-	MAPParse(&info, filepath)
+	MAPParse(&info, filepath, flag)
+	//flag default param = 0
+	//flag is UnDecorateSymbolName function flag
 
 example
 
@@ -14,8 +16,9 @@ example
 
 	int main()
 	{
-		CMapInfo info;
-		if(MAPParse(&info, "E:/sourcefolder/trunk/application.map") == Parse_Success) // Parse_Success is 0
+	  CMapInfo info;
+	  if(MAPParse(&info, "E:/sourcefolder/trunk/application.map") == Parse_Success) // Parse_Success is 0
+	    //MAPParse(&info, "E:/sourcefolder/trunk/application.map", UNDNAME_NAME_ONLY)
 	  {
 	    //read ok
 	    return 1;
